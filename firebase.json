@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "predeploy": [
+      
+    ]
+  },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  }
+}
