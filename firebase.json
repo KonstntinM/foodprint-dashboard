@@ -10,5 +10,13 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "functions": {
+    "predeploy": [
+      
+    ]
+  },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
   }
 }
