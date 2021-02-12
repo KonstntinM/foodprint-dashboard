@@ -12,11 +12,22 @@
     ]
   },
   "functions": {
-    "predeploy": [
-      
-    ]
+    "predeploy": [],
+    "source": "functions"
   },
   "remoteconfig": {
     "template": "remoteconfig.template.json"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 9090
+    },
+    "ui": {
+      "enabled": true,
+      "port": 81
+    }
   }
 }
