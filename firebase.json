@@ -28,6 +28,9 @@
     "ui": {
       "enabled": true,
       "port": 81
+    },
+    "auth": {
+      "port": "9099"
     }
   }
 }
