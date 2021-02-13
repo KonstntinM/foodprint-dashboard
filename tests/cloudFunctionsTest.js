@@ -1,4 +1,4 @@
-var firebase = require('firebase-admin');
+const firebase = require('firebase');
 
 var firebaseConfig = {
     projectId: "foodprint-c08ba"
