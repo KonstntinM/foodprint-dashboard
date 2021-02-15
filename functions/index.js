@@ -15,8 +15,13 @@ admin.initializeApp({ projectId: "foodprint-c08ba" });
 const baseUrl = "https://world.openfoodfacts.org/api/v0/product/{{EAN}}.json?fields=code,product_name,image_front_url,manufacturing_places,purchase_places,ingredients,packaging,nutriments,categories_hierarchy,packaging";
 
 exports.requestProduct = functions.https.onCall(async(data, context) => {
+  
+  if (!data.EAN) return { status: 422, message: "Your request is missing an EAN."};
 
-  //ToDo! Check wether or not the product already exists.
+  const ean = data.EAN.toString();
+
+  var doc = await admin.firestore().collection("products").doc(ean).get();
+  if (doc.exists) return { status: 409, message: "The product already exists." };
 
   var response = await fetch(baseUrl.replace("{{EAN}}", data.EAN))
   response = await response.json();
@@ -76,9 +81,9 @@ exports.requestProduct = functions.https.onCall(async(data, context) => {
     }
   }
 
-  admin.firestore().collection("products").doc(product.ean).set(product);
+  admin.firestore().collection("products").doc(ean).set(product);
 
-  return product;
+  return { status: 200, message: "The product was successfully found in our database.", product: product };
 });
 
 exports.calculateScore = functions.firestore
