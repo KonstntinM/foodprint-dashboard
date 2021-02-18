@@ -14,6 +14,24 @@ admin.initializeApp({ projectId: "foodprint-c08ba" });
 
 const baseUrl = "https://world.openfoodfacts.org/api/v0/product/{{EAN}}.json?fields=code,product_name,image_front_url,manufacturing_places,purchase_places,ingredients,packaging,nutriments,categories_hierarchy,packaging";
 
+exports.listUsers = functions.https.onCall((data, context) => {
+  if (!context.auth.token.isAdmin) return { status: 401, message: "You are not authorized to request this resource." };
+
+  return admin.auth().getUsers();
+});
+
+exports.setAdmin = functions.https.onCall(async (data, context) => {
+  if (!context.auth.token.isAdmin) return { status: 401, message: "You are not authorized to performe this action." };
+  const user = await admin.auth().getUserByEmail(data.email);
+  return admin.auth().setCustomUserClaims(user.uid, { isAdmin: data.isAdmin });
+});
+
+exports.setMember = functions.https.onCall(async (data, context) => {
+  if (!context.auth.token.isAdmin) return { status: 401, message: "You are not authorized to performe this action." };
+  const user = await admin.auth().getUserByEmail(data.email);
+  return admin.auth().setCustomUserClaims(user.uid, { isMember: data.isMember });
+});
+
 exports.requestProduct = functions.https.onCall(async(data, context) => {
   
   if (!data.EAN) return { status: 422, message: "Your request is missing an EAN."};
