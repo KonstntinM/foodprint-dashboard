@@ -17,6 +17,7 @@ const baseUrl = "https://world.openfoodfacts.org/api/v0/product/{{EAN}}.json?fie
 exports.requestProduct = functions.https.onCall(async(data, context) => {
   
   if (!data.EAN) return { status: 422, message: "Your request is missing an EAN."};
+  functions.logger.log("This function uses the EAN", data.EAN, ".");
 
   const ean = data.EAN.toString();
 
