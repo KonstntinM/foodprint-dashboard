@@ -9,7 +9,7 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.functions().useEmulator("localhost", 5001);
 var requestProduct = firebase.functions().httpsCallable('requestProduct');
-requestProduct({ EAN: 737628064502})
+requestProduct({ EAN: 737628064502}) // Alternative: 4013143080064
     .then((result) => {
         console.log(result.data);
     });

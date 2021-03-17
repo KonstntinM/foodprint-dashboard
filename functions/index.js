@@ -82,14 +82,28 @@ exports.requestProduct = functions.https.onCall(async(data, context) => {
     }
   }
 
-  for (const packaging of response.product.packaging.includes(",") ? response.product.packaging.split(",") : response.prodcut.packaging) {
-    var doc = await admin.firestore().collection("packaging").doc(packaging).get();
-    if (doc.exists) {
-      doc = doc.data();
-      product.packaging.push(doc)
-    } else {
-      product.packaging.push({id: packaging, name: packaging, value: null});
-      admin.firestore().collection("packaging").doc(packaging).set({name: packaging, value: null});
+  if (response.product.packaging) {
+    if (Array.isArray(response.product.packaging)) {
+      for (const packaging of response.product.packaging.includes(",") ? response.product.packaging.split(",") : response.prodcut.packaging) {
+        var doc = await admin.firestore().collection("packaging").doc(packaging).get();
+        if (doc.exists) {
+          doc = doc.data();
+          product.packaging.push(doc)
+        } else {
+          product.packaging.push({id: packaging, name: packaging, value: null});
+          admin.firestore().collection("packaging").doc(packaging).set({name: packaging, value: null});
+        }
+      }
+    } else if (typeof response.product.packaging == "string") {
+      const packaging = response.product.packaging;
+      var doc = await admin.firestore().collection("packaging").doc(packaging).get();
+      if (doc.exists) {
+        doc = doc.data();
+        product.packaging.push(doc)
+      } else {
+        product.packaging.push({id: packaging, name: packaging, value: null});
+        admin.firestore().collection("packaging").doc(packaging).set({name: packaging, value: null});
+      }
     }
   }
 
